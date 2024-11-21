@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Methods</title>
+</head>
+<body>
+    <h1>Sentiment Analysis Methods (Excluding AI Models)</h1>
+
+    <p>If you're looking for sentiment analysis methods without using AI models directly (like pre-trained neural networks or APIs), here are several approaches based on traditional techniques in natural language processing (NLP):</p>
+
+    <h2>1. Lexicon-Based Sentiment Analysis</h2>
+    <p><strong>Approach:</strong> Use predefined lists of words associated with certain emotions or sentiment labels. Each word in the lexicon is assigned a sentiment score or emotion (positive, negative, angry, etc.).</p>
+    <p><strong>How it works:</strong> You can use a sentiment lexicon like <strong>VADER</strong>, <strong>SentiWordNet</strong>, or <strong>AFINN</strong>. These lexicons have words tagged with sentiment polarity scores. For each comment, you analyze the words in it, score them based on their sentiment value, and compute an overall sentiment by aggregating the individual scores.</p>
+    <p><strong>Emotion detection:</strong> To detect specific emotions (anger, happiness, sadness, etc.), you can use more specialized lexicons like <strong>NRC Emotion Lexicon</strong> or <strong>EmoLex</strong> that categorize words into emotional categories.</p>
+    <p><strong>Steps:</strong></p>
+    <ul>
+        <li>Tokenize the comments into words.</li>
+        <li>Check each word against the lexicon.</li>
+        <li>Sum the sentiment scores for each comment and determine the overall sentiment.</li>
+    </ul>
+    <p><strong>Tools:</strong> <strong>VADER</strong> (Valence Aware Dictionary and sEntiment Reasoner) is a good lexicon-based approach for social media text. <strong>TextBlob</strong> (though AI-based in some parts, it mainly relies on rules and lexicons for sentiment analysis).</p>
+
+    <h2>2. Rule-Based Sentiment Scoring</h2>
+    <p><strong>Approach:</strong> Define a set of rules based on language structure to classify emotions and sentiment.</p>
+    <p><strong>How it works:</strong> You can manually create a set of rules that look for common expressions of emotion in text (e.g., "I love" for positive, "I hate" for negative, etc.). You can extend this with negation rules (e.g., "not happy" = negative).</p>
+    <p><strong>Emotion detection:</strong> Similar to lexicon-based, you can define rules that trigger specific emotions based on keywords and phrases, like "sad" triggering sadness or "angry" triggering anger.</p>
+    <p><strong>Steps:</strong></p>
+    <ul>
+        <li>Create a list of keywords and rules related to emotions.</li>
+        <li>Parse the comments to match these rules and assign an emotion or sentiment accordingly.</li>
+        <li>Account for negation or modifiers like "very", "not", or "almost" to adjust the sentiment score or emotion tag.</li>
+    </ul>
+    <p><strong>Example Rule:</strong> If a comment contains words like "hate", "dislike", or "angry", label it as negative. If a comment contains words like "love", "happy", or "excited", label it as positive.</p>
+
+    <h2>3. Aspect-Based Sentiment Analysis (ABSA)</h2>
+    <p><strong>Approach:</strong> Focuses on identifying the sentiment associated with specific aspects or features of a subject mentioned in a comment.</p>
+    <p><strong>How it works:</strong> You can break down comments into components (e.g., product features, experiences, etc.) and analyze sentiment for each component. For example, if a user says "I love the design but hate the battery life", the sentiment can be "positive" for design and "negative" for battery life.</p>
+    <p><strong>Emotion detection:</strong> The method can work in tandem with emotion lexicons, focusing on specific domains or contexts.</p>
+    <p><strong>Steps:</strong></p>
+    <ul>
+        <li>Identify key aspects in each comment (e.g., features, experiences, etc.).</li>
+        <li>Perform sentiment analysis separately for each aspect using lexicons or rules.</li>
+        <li>Aggregate the results to identify overall sentiment or emotional tone.</li>
+    </ul>
+
+    <h2>4. Keyword Matching with Emotions</h2>
+    <p><strong>Approach:</strong> Build a custom set of keywords that represent different emotions (e.g., "joy", "sad", "angry", "love", "hate").</p>
+    <p><strong>How it works:</strong> You can scan comments for the presence of these keywords, and based on their frequency or context, classify the overall emotion. For instance, if the word "angry" is found, the sentiment is categorized as angry.</p>
+    <p><strong>Emotion detection:</strong> This approach is direct and helps identify the core emotion expressed in the comment.</p>
+    <p><strong>Steps:</strong></p>
+    <ul>
+        <li>Create emotion-based keyword lists for each sentiment category.</li>
+        <li>Scan each comment for matches to these keywords.</li>
+        <li>Depending on the frequency or context, assign the most relevant emotion.</li>
+    </ul>
+
+    <h2>5. Polarity Score Aggregation</h2>
+    <p><strong>Approach:</strong> This method involves computing a polarity score for each word in the text and aggregating these to determine the overall sentiment.</p>
+    <p><strong>How it works:</strong> For instance, you can use <strong>SentiWordNet</strong> or <strong>VADER</strong> to get a polarity score (positive, negative, or neutral) for each word in the text. Then, calculate the average or sum of these scores to assign an overall sentiment.</p>
+    <p><strong>Emotion detection:</strong> If the sum or average is significantly positive, it could reflect joy or happiness; if negative, it may indicate anger or sadness.</p>
+    <p><strong>Steps:</strong></p>
+    <ul>
+        <li>Tokenize the text and find polarity scores for individual words.</li>
+        <li>Aggregate the scores (e.g., averaging or summing them).</li>
+        <li>Assign a sentiment (positive/negative/neutral) based on the aggregated score.</li>
+    </ul>
+
+    <h2>6. Crowdsourcing</h2>
+    <p><strong>Approach:</strong> If you want a more manual method and have a lot of comments, you can use crowdsourcing tools (like Amazon Mechanical Turk or similar) to ask human annotators to categorize the emotions or sentiment of comments.</p>
+    <p><strong>How it works:</strong> Human annotators can classify the comments into various emotion categories (positive, negative, sad, angry, etc.), and this can be averaged for consensus.</p>
+    <p><strong>Emotion detection:</strong> Human reviewers can often better interpret nuanced emotions, sarcasm, or context than automated systems.</p>
+    <p><strong>Steps:</strong></p>
+    <ul>
+        <li>Upload your comments to a crowdsourcing platform.</li>
+        <li>Set clear instructions for the workers to categorize sentiment or emotion.</li>
+        <li>Analyze the aggregated responses to determine the final sentiment.</li>
+    </ul>
+
+    <h2>7. Manual Classification Based on Keyword and Context</h2>
+    <p><strong>Approach:</strong> Manually classify comments based on common emotional expressions or patterns.</p>
+    <p><strong>How it works:</strong> If you have a small number of comments or you're looking for specific emotions (e.g., anger, sadness), you can manually classify based on the vocabulary and tone used in the text.</p>
+    <p><strong>Emotion detection:</strong> Since you're manually tagging, you can focus on the exact emotion you want to detect (anger, sadness, happiness, etc.) and consider both keywords and the context they are used in.</p>
+
+    <h2>Conclusion</h2>
+    <ul>
+        <li><strong>Lexicon-based methods</strong> (like VADER or NRC Emotion Lexicon) are great for automatic and relatively simple sentiment analysis.</li>
+        <li><strong>Rule-based or keyword-based</strong> methods work if you're looking for a more controlled and customizable approach.</li>
+        <li><strong>Aspect-based analysis</strong> allows you to drill deeper into specific sentiments tied to parts of a comment, useful in reviews or product feedback.</li>
+        <li>If you have the time and resources, <strong>crowdsourcing</strong> can be a reliable option for complex sentiment analysis tasks, especially in subjective areas.</li>
+    </ul>
+
+    <p>Each of these methods comes with its strengths and trade-offs, depending on how accurate and complex you want your analysis to be.</p>
+</body>
+</html>

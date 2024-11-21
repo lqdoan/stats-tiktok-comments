@@ -1,0 +1,44 @@
+Tên file                                                        | Số bình luận
+vt-tiktok-com-ZSjm7AFjP.json                                    | 206
+vt-tiktok-com-ZSjm7D3LN.json                                    | 160
+vt-tiktok-com-ZSjm7kYpW.json                                    | 240
+vt-tiktok-com-ZSjm7Qj7E.json                                    | 930
+vt-tiktok-com-ZSjm7uh7U.json                                    | 1070
+www-tiktok-com-sofl-tiengtrung-video-6937970214248238338.json   | 931
+Lưu ý: chỉ lấy top comment, không lấy reply
+
+I/ Về thu thập dữ liệu
+
+Có 3 cách:
+ 
+ (1) Dùng dịch vụ của bên thứ 3 (tool/API/web app/etc): 
+    Lợi: dễ dung
+    Hại: 
+        (1) dữ liệu lấy được bị giới hạn. 
+            Ví dụ https://vt.tiktok.com/ZSjm7uh7U/ có ~6.3k cmt, nhưng chỉ lấy được ~1k
+	(2) để không bị giới hạn, buộc phải trả phí
+ 
+ (2) Tự lập trình (dựa trên các thư viện như Selenium):
+    Lợi: không mất phí
+    Hại: rất mất thời gian và công sức. Đây là lý do các dịch vụ ở (1) lấy phí cao.
+ 
+ (3) Dùng dịch vụ của TikTok:
+    Lợi: dữ liệu chính xác và đầy đủ nhất
+    Hại: Phải apply researcher để có thể sử dụng các Dev-tool do TikTok cung cấp; quy trình này có thể mất đến 4 tuần.
+
+Ngoài ra, khi "cào" (scrape) dữ liệu từ TikTok, thông qua cách (1) hoặc (2) có nguy cơ dẫn đến việc tài khoản TikTok, IP bị cấm (ban) bởi TikTok. Thêm nữa, cào dữ liệu có thể vướng mắc các vấn đề pháp lý (cần tìm hiểu T&C của TikTok)
+
+II/ Tạm kết
+
+- Đính kèm với ghi chú này là các file chứa dữ liệu của comment, trên video tương ứng. Tên file cũng là tên đường dẫn đến video. Nếu có quan tâm source code, mình cũng có thể gửi cho bạn.
+
+- Nếu cần xem qua dữ liệu, có thể đọc nó bằng 1 text editor, như notepad (thường dùng để đọc file txt) chẳng hạn.
+
+- Trước mắt, mình đang dùng bảng free của 1 số dịch vụ (1) để lấy dữ liệu; cũng không khuyên bạn trả phí. 
+
+- Nếu được, hãy thử cân nhắc lại scope. Rằng, nếu lấy khoảng vài trăm tới 1k cmt của 60 video (chứ không phải toàn bộ cmt của mỗi video), có lẽ sẽ khả thi.
+
+- Nếu nhắm đến cách (2), thì mình không thể hỗ trợ thêm (lượng thời gian cần là quá lớn).
+
+- Một ít dữ liệu ở đây chắc sẽ không giúp ích gì nhiều cho bạn, nhưng hi vọng chúng sẽ cho bạn cái nhìn tốt hơn về đề tài bạn đang làm. Chúc may mắn.
+
