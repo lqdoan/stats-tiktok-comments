@@ -1,6 +1,7 @@
 import csv
 from collections import Counter
 from openpyxl import Workbook
+import re
 
 # Read the text from a file
 with open('extracted_keywords.txt', 'r', encoding='utf-8') as file:
@@ -8,6 +9,9 @@ with open('extracted_keywords.txt', 'r', encoding='utf-8') as file:
 
 # Split the text into keywords by spaces and newlines
 keywords = text.split()
+
+# Filter special characters
+keywords = [keyword for keyword in keywords if re.search(r'[a-zA-Z0-9áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ]', keyword)]
 
 # Count the occurrences of each keyword
 keyword_count = Counter(keywords)
