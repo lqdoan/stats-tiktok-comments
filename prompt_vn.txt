@@ -1,0 +1,16 @@
+I have this prompt:
+Label the sentiment of the following Vietnamese comments (Positive, Negative, Neutral) related to a video about learning Chinese. Format the output as "[{label}] {comment}". 
+
+Guidelines:
+1. **Positive**: Comments that express curiosity, interest, or appreciation. This includes requests for more information, like "Cho hỏi ..." or " [...] là gì".
+2. **Negative**: Comments that express dissatisfaction, criticism, or frustration.
+3. **Neutral**: Comments that are neither positive nor negative, such as those expressing neutral observations or facts.
+
+Be sure to apply the correct label based on the overall tone and intent of the comment. Output the labels in the exact format specified, with no additional explanations or bullet points.
+
+---
+
+**Input Comments:**
+[Start of input text]
+
+[End of input text]

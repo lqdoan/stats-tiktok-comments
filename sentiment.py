@@ -1,112 +1,109 @@
 import os
 import time
-import argparse  # Import argparse for command-line arguments
-import google.generativeai as genai
+# import argparse  # Import argparse for command-line arguments
+# import google.generativeai as genai
 from dotenv import load_dotenv
-from openpyxl import Workbook
+from openai import OpenAI
+
 
 # Load API key from .env file
 load_dotenv()
-api_key = os.getenv('GOOGLE_API_KEY')
+api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI()
 
-# Configure the genai model
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-1.5-flash")
+input_file_path='processed_data/sentiment_label/vt-tiktok-com-ZSjm7D3LN.txt'
+output_file_path = 'output_sentiments.txt'
 
-# Parse command-line arguments
-parser = argparse.ArgumentParser(description="Process Vietnamese comments with AI sentiment labeling.")
-parser.add_argument("start_line", type=int, help="The starting line number to begin processing from (1-based).")
-args = parser.parse_args()
-start_line = args.start_line
+with open(input_file_path, 'r', encoding='utf-8') as file:
+    content = file.read()
 
-# File paths
-input_file = "pre-processed_data/vietnamese_text.txt"
-output_file = "processed_data/labeled_vietnamese_text.txt"
-excel_file = "processed_data/count_label.xlsx"
+completion = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {
+            "role": "user",
+            "content": f'''
+I have this prompt:
+Label the sentiment of the following Vietnamese comments (Positive, Negative, Neutral) related to a video about learning Chinese. Format the output as "[{{label}}] {{comment}}". 
 
-# Load Vietnamese comments from a file
-with open(input_file, "r", encoding="utf-8") as file:
-    comments = file.readlines()
+Guidelines:
+1. **Positive**: Comments that express curiosity, interest, or appreciation. This includes requests for more information, like "Cho hỏi ..." or " [...] là gì".
+2. **Negative**: Comments that express dissatisfaction, criticism, or frustration.
+3. **Neutral**: Comments that are neither positive nor negative, such as those expressing neutral observations or facts.
 
-# Initialize label counts
-label_counts = {"tích cực": 0, "tiêu cực": 0, "trung lập": 0}
+Be sure to apply the correct label based on the overall tone and intent of the comment. Output the labels in the exact format specified, with no additional explanations or bullet points.
 
-# List to store labeled comments
-labeled_comments = []
+---
 
-try:
-    # Label each comment starting from the specified line
-    for index, comment in enumerate(comments[start_line - 1:], start=start_line):
-        comment = comment.strip()  # Remove leading/trailing whitespace
-        if not comment:  # Skip empty lines
-            continue
+**Input Comments:**
+[Start of input text]
+{content}
+[End of input text]'''
+        }
+    ]
+)
 
-        # Use AI model to determine the sentiment
-        # prompt = (
-        #     # f"Label the sentiment of the following Vietnamese text as "
-        #     # f"'tích cực' (positive), 'tiêu cực' (negative), or 'trung lập' (neutral):\n\n{comment}"
-        #     f"Hãy đánh giá sắc thái của bình luận sau và dán nhãn "
-        #     f"'tích cực' (positive), 'tiêu cực' (negative), or 'trung lập' (neutral):\n\n{comment}"
-        # )
-        
-        prompt = (
-            f"Please label the sentiment of the following Vietnamese text as one of the following: "
-            f"'tích cực' (positive), 'tiêu cực' (negative), or 'trung lập' (neutral).\n"
-            f"The sentiment should be based on the general tone of the comment, including "
-            f"subtle or implied expressions of positivity or negativity. For example:\n\n"
-            f"- 'Công nhận, rất tinh tế' should be labeled as 'tích cực' because it expresses admiration and positivity.\n"
-            f"- 'Tôi không thích điều này' should be labeled as 'tiêu cực' because it expresses dislike.\n"
-            f"- 'Sản phẩm bình thường' should be labeled as 'trung lập' because it is neutral.\n\n"
-            f"Now, please label the sentiment of the following comment:\n\n{comment}"
-        )
-        
-        response = model.generate_content(prompt)
-        label = response.text.strip().lower()  # Extract label from response and normalize
+# print(completion.choices[0].message)
 
-        # Ensure the label is valid
-        if label not in label_counts:
-            label = "trung lập"  # Default to neutral if label is invalid
+# Write the response to the output file
+with open(output_file_path, 'w', encoding='utf-8') as file:
+    file.write(completion.choices[0].message)
 
-        # Update counts and prepare labeled comment
-        label_counts[label] += 1
-        labeled_comments.append(f"[{label}] {comment}")
+print(f"Sentiment labels have been written to {output_file_path}")
 
-        # Sleep for 0.2 seconds between API calls to avoid rate limits
-        time.sleep(0.2)
+# import os
+# from dotenv import load_dotenv
+# import openai
 
-except Exception as e:
-    # Save progress if an error occurs
-    last_line = index
-    error_output_file = f"{output_file.replace('.txt', '')}_line_{last_line}.txt"
-    print(f"An error occurred at line {last_line}: {e}")
-    with open(error_output_file, "w", encoding="utf-8") as file:
-        file.write("\n".join(labeled_comments))
-    print(f"Progress saved to: {error_output_file}")
-    raise  # Re-raise the error after saving progress
+# # Load API key from .env file
+# load_dotenv()
+# api_key = os.getenv('OPENAI_API_KEY')
 
-# Save labeled comments to a file
-with open(output_file, "w", encoding="utf-8") as file:
-    file.write("\n".join(labeled_comments))
+# # Set the API key for OpenAI
+# openai.api_key = api_key
 
-# Calculate total count and ratios
-total_comments = sum(label_counts.values())
-label_ratios = {label: count / total_comments for label, count in label_counts.items()}
+# # Input and output file paths
+# input_file_path = 'processed_data/sentiment_label/vt-tiktok-com-ZSjm7D3LN.txt'
+# output_file_path = 'output_sentiments.txt'
 
-# Save counts and ratios to an Excel file
-wb = Workbook()
-ws = wb.active
-ws.title = "Label Counts"
+# # Read content from the input file
+# with open(input_file_path, 'r', encoding='utf-8') as file:
+#     content = file.read()
 
-# Write header
-ws.append(["Label", "Count", "Ratio"])
+# # Create a chat completion
+# completion = openai.ChatCompletion.create(
+#     model="gpt-3.5-turbo",
+#     messages=[
+#         {"role": "system", "content": "You are a helpful assistant."},
+#         {
+#             "role": "user",
+#             "content": f'''
+# I have this prompt:
+# Label the sentiment of the following Vietnamese comments (Positive, Negative, Neutral) related to a video about learning Chinese. Format the output as "[{{label}}] {{comment}}". 
 
-# Write data
-for label, count in label_counts.items():
-    ws.append([label, count, f"{label_ratios[label]:.4f}"])
+# Guidelines:
+# 1. **Positive**: Comments that express curiosity, interest, or appreciation. This includes requests for more information, like "Cho hỏi ..." or " [...] là gì".
+# 2. **Negative**: Comments that express dissatisfaction, criticism, or frustration.
+# 3. **Neutral**: Comments that are neither positive nor negative, such as those expressing neutral observations or facts.
 
-# Save the Excel workbook
-wb.save(excel_file)
+# Be sure to apply the correct label based on the overall tone and intent of the comment. Output the labels in the exact format specified, with no additional explanations or bullet points.
 
-print("Processing complete!")
-print(f"Labeled comments saved to: {output_file}")
-print(f"Label counts saved to: {excel_file}")
+# ---
+
+# **Input Comments:**
+# [Start of input text]
+# {content}
+# [End of input text]'''
+#         }
+#     ]
+# )
+
+# # Get the response text
+# response_text = completion['choices'][0]['message']['content']
+
+# # Write the response to the output file
+# with open(output_file_path, 'w', encoding='utf-8') as file:
+#     file.write(response_text)
+
+# print(f"Sentiment labels have been written to {output_file_path}")
