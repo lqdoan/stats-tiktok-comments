@@ -2,19 +2,39 @@ import csv
 from collections import Counter
 from openpyxl import Workbook
 import re
+import os
 
-# Read the text from a file
-with open('./pre-processed_data/extracted_keywords.txt', 'r', encoding='utf-8') as file:
-    text = file.read()
+# Initialize a list to store all the keywords from multiple files
+all_keywords = []
 
-# Split the text into keywords by spaces and newlines
-keywords = text.split()
+# Function to read and process the text from each file
+def read_and_process_files(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.txt'):
+            file_path = os.path.join(folder_path, filename)
+            try:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    text = file.read()
+                    
+                    # Split the text into keywords by spaces and newlines
+                    keywords = text.split()
+                    
+                    # Filter special characters
+                    keywords = [keyword for keyword in keywords if re.search(r'[a-zA-Z0-9áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ]', keyword)]
+                    
+                    # Add the keywords to the all_keywords list
+                    all_keywords.extend(keywords)
+            except Exception as e:
+                print(f"Error reading file {filename}: {e}")
 
-# Filter special characters
-keywords = [keyword for keyword in keywords if re.search(r'[a-zA-Z0-9áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ]', keyword)]
+# Path to the folder containing the keyword text files
+folder_path = 'processed_data/extracted_keywords'
+
+# Read and process all files in the folder
+read_and_process_files(folder_path)
 
 # Count the occurrences of each keyword
-keyword_count = Counter(keywords)
+keyword_count = Counter(all_keywords)
 
 # Total number of keywords (for calculating ratio)
 total_count = sum(keyword_count.values())
