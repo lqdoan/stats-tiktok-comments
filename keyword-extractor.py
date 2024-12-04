@@ -37,7 +37,7 @@ def process_all_files(input_folder, output_folder):
 
 if __name__ == '__main__':
     # Define the input and output folders
-    input_folder = 'pre-processed_data/vietnamese'
+    input_folder = 'pre-processed_data/clean_vietnamese_text'
     output_folder = 'extracted_keywords'
 
     # Process all .txt files in the input folder

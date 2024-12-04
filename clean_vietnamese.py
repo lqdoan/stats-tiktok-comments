@@ -18,12 +18,13 @@ def clean_file(input_file_path, output_file_path):
         non_blank_lines = [line for line in cleaned_lines if line.strip()]
 
         # Remove duplicate lines
-        seen = set()
-        unique_lines = []
-        for line in non_blank_lines:
-            if line not in seen:
-                unique_lines.append(line)
-                seen.add(line)
+        # seen = set()
+        # unique_lines = []
+        # for line in non_blank_lines:
+        #     if line not in seen:
+        #         unique_lines.append(line)
+        #         seen.add(line)
+        unique_lines = non_blank_lines
 
         # Write the cleaned content to the new output file
         with open(output_file_path, 'w', encoding='utf-8') as outfile:
