@@ -1,16 +1,14 @@
+import os
 import re
 
 # Define helper functions for classification
 def is_vietnamese(char):
-    # Match Vietnamese letters and diacritics
     return bool(re.match(r'[a-zA-Záàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ]', char))
 
 def is_chinese(char):
-    # Match Chinese characters in the CJK Unified Ideographs range
     return '\u4e00' <= char <= '\u9fff'
 
 def is_emoji(char):
-    # Match emojis using Unicode ranges
     emoji_ranges = [
         (0x1F600, 0x1F64F),  # Emoticons
         (0x1F680, 0x1F6FF),  # Transport and Map Symbols
@@ -34,7 +32,6 @@ def classify_text(text):
     words = re.split(r'(\s+)', text)
 
     for word in words:
-        # Check the classification of each character in the word
         if all(is_vietnamese(char) or char.isspace() for char in word):
             vietnamese_text.append(word)
         elif all(is_chinese(char) or char.isspace() for char in word):
@@ -42,7 +39,6 @@ def classify_text(text):
         elif all(is_emoji(char) or char.isspace() for char in word):
             emojis.append(word)
         else:
-            # Handle mixed content (e.g., "你好Chào" or "😄Chào")
             for char in word:
                 if is_vietnamese(char):
                     vietnamese_text.append(char)
@@ -55,26 +51,51 @@ def classify_text(text):
 
     return ''.join(vietnamese_text), ''.join(chinese_text), ''.join(emojis)
 
-def process_file(input_file_path):
-    # Step 1: Read the content of the file
+def process_file(input_file_path, vietnamese_folder, chinese_folder, emoji_folder):
+    # Read the content of the file
     with open(input_file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
-    # Step 2: Classify text into categories
+    # Classify text into categories
     vietnamese_text, chinese_text, emojis = classify_text(content)
 
-    # Step 3: Save the categorized text to separate files
-    with open('vietnamese_text.txt', 'w', encoding='utf-8') as file:
+    # Ensure output folders exist
+    os.makedirs(vietnamese_folder, exist_ok=True)
+    os.makedirs(chinese_folder, exist_ok=True)
+    os.makedirs(emoji_folder, exist_ok=True)
+
+    # Get the filename from the path and use it for saving classified texts
+    filename = os.path.basename(input_file_path)
+
+    # Save the classified text to corresponding folders
+    with open(os.path.join(vietnamese_folder, filename), 'w', encoding='utf-8') as file:
         file.write(vietnamese_text)
 
-    with open('chinese_text.txt', 'w', encoding='utf-8') as file:
+    with open(os.path.join(chinese_folder, filename), 'w', encoding='utf-8') as file:
         file.write(chinese_text)
 
-    with open('emojis.txt', 'w', encoding='utf-8') as file:
+    with open(os.path.join(emoji_folder, filename), 'w', encoding='utf-8') as file:
         file.write(emojis)
 
-    print("Text has been separated and saved.")
+    print(f"Processed {filename} and saved classified text.")
 
-# Example usage
-input_file_path = 'data/all_comments.txt'
-process_file(input_file_path)
+def process_all_files(input_folder):
+    # Define output folders for classified content
+    vietnamese_folder = 'vietnamese'
+    chinese_folder = 'chinese'
+    emoji_folder = 'emoji'
+
+    # Iterate through all .txt files in the input folder
+    for filename in os.listdir(input_folder):
+        if filename.endswith('.txt'):
+            input_file_path = os.path.join(input_folder, filename)
+            process_file(input_file_path, vietnamese_folder, chinese_folder, emoji_folder)
+
+if __name__ == '__main__':
+    # Define the input folder containing the .txt files
+    input_folder = 'data/all_comments'
+
+    # Process all .txt files in the folder
+    process_all_files(input_folder)
+
+    print("All files have been processed and saved in their respective folders.")
