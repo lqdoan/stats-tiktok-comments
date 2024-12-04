@@ -4,7 +4,7 @@ from openpyxl import Workbook
 import re
 
 # Read the text from a file
-with open('extracted_keywords.txt', 'r', encoding='utf-8') as file:
+with open('./pre-processed_data/extracted_keywords.txt', 'r', encoding='utf-8') as file:
     text = file.read()
 
 # Split the text into keywords by spaces and newlines
